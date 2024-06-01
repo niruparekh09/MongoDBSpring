@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rider")
+@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3600) //React Vite
 public class RiderController {
 
     @Autowired
@@ -32,7 +33,7 @@ public class RiderController {
             Team team = newRider.getTeamName();
             newRider.setTeamName(teamRepo.findTeamByName(team.getName()));
             Rider newRiderInfo = riderService.AddRider(newRider);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new APIResponse(newRiderInfo.toString()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(newRiderInfo);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIResponse(e.getMessage()));
         }
@@ -42,7 +43,7 @@ public class RiderController {
     ResponseEntity<?> riderLists() {
         try {
             List<Rider> riderList = riderService.getAllRiders();
-            return ResponseEntity.status(HttpStatus.OK).body(new APIResponse(riderList.toString()));
+            return ResponseEntity.status(HttpStatus.OK).body(riderList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIResponse(e.getMessage()));
         }
@@ -52,7 +53,7 @@ public class RiderController {
     ResponseEntity<?> getRider(@PathVariable String id) {
         try {
             Rider riderInfo = riderService.getRiderDetails(id);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new APIResponse(riderInfo.toString()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(riderInfo);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIResponse(e.getMessage()));
         }
@@ -62,7 +63,7 @@ public class RiderController {
     ResponseEntity<?> deleteRider(@PathVariable String id) {
         try {
             String deletedRider = riderService.deleteARider(id);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new APIResponse(deletedRider));
+            return ResponseEntity.status(HttpStatus.CREATED).body(deletedRider);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIResponse(e.getMessage()));
         }
